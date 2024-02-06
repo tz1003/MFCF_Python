@@ -46,7 +46,10 @@ def greedy_sortsep(vtx, sep, W):
 
 def j_LoGo(cov, cliques, separators):
     J = np.zeros((cov.shape[0],cov.shape[0]))
-    C = cov
+    C = cov#.to_numpy()
+
+    cliques = np.array(cliques,dtype=int)
+    separators = np.array(separators,dtype=int)
 
     for c in cliques:
         J[np.ix_(c, c)] += np.linalg.inv(C[np.ix_(c, c)])

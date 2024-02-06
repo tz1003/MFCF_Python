@@ -7,8 +7,6 @@ from gain_function import gf_sumsquares_gen
 from utils import *
 from init_gain_table import init_gain_table
 
-
-
 def MFCF_Forest(X,ct_control,gain_function):
 
     # analyse X
@@ -106,7 +104,7 @@ def MFCF_Forest(X,ct_control,gain_function):
         # Case: extension of an existing clique
         else:
             clique_to_update = parent_clique_id
-            cliques[clique_to_update - 1, :len(new_clique)] = new_clique
+            cliques[clique_to_update, :len(new_clique)] = new_clique
             clique_extension = 1
             # Parent clique is the same as the clique without the last extension
             old_clique_idx = id_from_set(GT['cliques'], parent_clique)
