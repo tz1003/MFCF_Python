@@ -148,6 +148,12 @@ def MFCF_Forest(X,ct_control,gain_function):
         if clique_extension == 1:
             GT['gains'][old_clique_idx] = np.nan
 
+        if ct_control['coordination_num'] > 0:
+            if len(the_sep)>0:
+                if len(np.where(separators==[the_sep])[0])>=ct_control['coordination_num']:
+                    idx_exceed_coord_num = np.where(GT['separators']==the_sep)[0]
+                    GT['gains'][idx_exceed_coord_num]=np.nan
+
         # If drop sep, remove also the separator just used
         if ct_control['drop_sep'] == True:
             idx = id_from_set(GT['separators'], the_sep)
