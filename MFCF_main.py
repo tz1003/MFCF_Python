@@ -4,7 +4,7 @@ import itertools as itertools
 import pandas as pd
 from scipy.sparse import lil_matrix
 from gain_function import gf_sumsquares_gen
-from utils import *
+from utils_mfcf import *
 from init_gain_table import init_gain_table
 
 def MFCF_Forest(X,ct_control,gain_function):
@@ -55,6 +55,18 @@ def MFCF_Forest(X,ct_control,gain_function):
     GT['tot_records'] = to_idx
     idx = np.arange(from_idx, to_idx)
     clq_len = len(first_clique)
+
+
+    if np.isnan(GT['cliques'][:,0]).sum()<len(idx):
+        diff = (len(idx)-np.isnan(GT['cliques'][:,0]).sum())*2
+        adding_item_clique = np.array([[np.nan,np.nan]]*diff)
+        GT['cliques']=np.concatenate((GT['cliques'], adding_item_clique), axis=0)
+        adding_item_gains = np.array([np.nan]*diff)
+        GT['gains']=np.concatenate((GT['gains'], adding_item_gains), axis=0)
+        adding_item_separators = np.array([[np.nan]]*diff)
+        GT['separators']=np.concatenate((GT['separators'], adding_item_separators), axis=0)
+
+
     GT['cliques'][idx, :clq_len] = np.tile(first_clique, (new_gains, 1))
     if clq_len < ct_control['max_clique_size']:
         GT['cliques'][idx, clq_len:] = np.nan
@@ -147,12 +159,6 @@ def MFCF_Forest(X,ct_control,gain_function):
         # If the clique was expanded, remove the records with the old clique from the gain table
         if clique_extension == 1:
             GT['gains'][old_clique_idx] = np.nan
-
-        if ct_control['coordination_num'] > 0:
-            if len(the_sep)>0:
-                if len(np.where(separators==[the_sep])[0])>=ct_control['coordination_num']:
-                    idx_exceed_coord_num = np.where(GT['separators']==the_sep)[0]
-                    GT['gains'][idx_exceed_coord_num]=np.nan
 
         # If drop sep, remove also the separator just used
         if ct_control['drop_sep'] == True:
