@@ -79,8 +79,6 @@ def MFCF_Forest(X,ct_control,gain_function):
 
         the_gain = np.nanmax(GT['gains'])
 
-        print(len(outstanding_nodes))
-
         # Case: no gain, add an isolated clique
         if np.isnan(the_gain):
             the_node = outstanding_nodes[0]
