@@ -163,7 +163,7 @@ def MFCF_Forest(X,ct_control,gain_function):
 
         if len(the_sep)!=0:
             idx = id_from_set(separators, the_sep)
-            if len(idx)<=ct_control['coordination_num']:
+            if len(idx)>=ct_control['coordination_num']:
                 idx = id_from_set(GT['separators'], the_sep)
                 GT['gains'][idx] = np.nan
 
