@@ -59,11 +59,11 @@ def MFCF_Forest(X,ct_control,gain_function):
 
     if np.isnan(GT['cliques'][:,0]).sum()<len(idx):
         diff = (len(idx)-np.isnan(GT['cliques'][:,0]).sum())*2
-        adding_item_clique = np.array([[np.nan,np.nan]]*diff)
+        adding_item_clique = np.full((diff, ct_control['max_clique_size']), np.nan)
         GT['cliques']=np.concatenate((GT['cliques'], adding_item_clique), axis=0)
         adding_item_gains = np.array([np.nan]*diff)
         GT['gains']=np.concatenate((GT['gains'], adding_item_gains), axis=0)
-        adding_item_separators = np.array([[np.nan]]*diff)
+        adding_item_separators = np.full((diff, ct_control['max_clique_size']-1), np.nan)
         GT['separators']=np.concatenate((GT['separators'], adding_item_separators), axis=0)
 
 
@@ -138,13 +138,13 @@ def MFCF_Forest(X,ct_control,gain_function):
 
         if np.isnan(GT['cliques'][:,0]).sum()<len(idx):
             diff = len(idx)-np.isnan(GT['cliques'][:,0]).sum()
-            adding_item_clique = np.array([[np.nan,np.nan]]*diff)
+            adding_item_clique = np.full((diff, ct_control['max_clique_size']), np.nan)
             GT['cliques']=np.concatenate((GT['cliques'], adding_item_clique), axis=0)
             adding_item_gains = np.array([np.nan]*diff)
             GT['gains']=np.concatenate((GT['gains'], adding_item_gains), axis=0)
-            adding_item_separators = np.array([[np.nan]]*diff)
+            adding_item_separators = np.full((diff, ct_control['max_clique_size']-1), np.nan)
             GT['separators']=np.concatenate((GT['separators'], adding_item_separators), axis=0)
-            
+
 
         GT['cliques'][idx, :clq_len] = np.tile(new_clique, (new_gains, 1))
         if clq_len < ct_control['max_clique_size']:
