@@ -76,7 +76,10 @@ def MFCF_Forest(X,ct_control,gain_function):
 
 
     while len(outstanding_nodes) > 0:
-        the_gain, idx = np.nanmax(GT['gains']), np.nanargmax(GT['gains'])
+
+        the_gain = np.nanmax(GT['gains'])
+
+        print(len(outstanding_nodes))
 
         # Case: no gain, add an isolated clique
         if np.isnan(the_gain):
@@ -85,7 +88,7 @@ def MFCF_Forest(X,ct_control,gain_function):
             parent_clique = np.array([], dtype=int)
             parent_clique_id = np.nan
         else:
-            idx = idx  # Keep only the first match, nanmax/nanargmax only return first max
+            idx = np.nanargmax(GT['gains'])
             the_node = int(GT['nodes'][idx])
             the_sep = GT['separators'][idx, :]
             the_sep = np.array(the_sep[~np.isnan(the_sep)],dtype=int)
@@ -159,6 +162,12 @@ def MFCF_Forest(X,ct_control,gain_function):
         # If the clique was expanded, remove the records with the old clique from the gain table
         if clique_extension == 1:
             GT['gains'][old_clique_idx] = np.nan
+
+        if len(the_sep)!=0:
+            idx = id_from_set(separators, the_sep)
+            if len(idx)<=ct_control['coordination_num']:
+                idx = id_from_set(GT['separators'], the_sep)
+                GT['gains'][idx] = np.nan
 
         # If drop sep, remove also the separator just used
         if ct_control['drop_sep'] == True:
