@@ -7,17 +7,26 @@ def id_from_set(set_matrix, an_element):
     return idx
 
 
+# mincsize######
 def apply_threshold_v(ranked_values, ranked_seps, mincsize, threshold):
 
     ranked_values_thr = []
     ranked_seps_thr = []
     for i in range(len(ranked_values)):
-        if ranked_values[i] < threshold:
-            ranked_values_thr.append(np.array([0]))
-            ranked_seps_thr.append(np.nan)
-        else:
-            ranked_values_thr.append(ranked_values[i])
-            ranked_seps_thr.append(ranked_seps[i])
+        rank_values_thr_row = []
+        rank_values_seps_row = []
+        for j in range(len(ranked_values[0])):
+                
+            if ranked_values[i][j] < threshold:
+                rank_values_thr_row.append(np.array([0]))
+                rank_values_seps_row.append(np.nan)
+            else:
+                rank_values_thr_row.append(ranked_values[i][j])
+                rank_values_seps_row.append(ranked_seps[i][j])
+        
+
+        ranked_values_thr.append(rank_values_thr_row)
+        ranked_seps_thr.append(rank_values_seps_row)  
 
     return np.array(ranked_values_thr),np.array(ranked_seps_thr)
 
@@ -47,14 +56,14 @@ def greedy_sortsep(vtx, sep, W):
 def j_LoGo(cov, cliques, separators):
     J = np.zeros((cov.shape[0],cov.shape[0]))
     C = cov#.to_numpy()
-
-    cliques = np.array(cliques,dtype=int)
-    separators = np.array(separators,dtype=int)
-
     for c in cliques:
-        J[np.ix_(c, c)] += np.linalg.inv(C[np.ix_(c, c)])
+        if np.isnan(c).any()==False:
+            c = np.array(c,dtype=int)
+            J[np.ix_(c, c)] += np.linalg.inv(C[np.ix_(c, c)])
     for s in separators:
-        J[np.ix_(s, s)] -= np.linalg.inv(C[np.ix_(s, s)])
+        if np.isnan(s).any()==False:
+            s = np.array(s,dtype=int)
+            J[np.ix_(s, s)] -= np.linalg.inv(C[np.ix_(s, s)])
 
     return J
 
