@@ -1,6 +1,5 @@
 from MFCF_main import MFCF_Forest
 from gain_function import gf_sumsquares_gen
-from utils_mfcf import j_LoGo
 import numpy as np
 import pandas as pd
 
