@@ -43,7 +43,7 @@ def generate_random_df(num_rows, num_columns):
   df = pd.DataFrame(data, columns=['col_{}'.format(i) for i in range(num_columns)])
   return df
 
-# fill in ct_control
+# set up ct_control
 ct_control = {
     'max_clique_size': 2,
     'min_clique_size': 1,
@@ -53,6 +53,9 @@ ct_control = {
 }
 
 df = generate_random_df(100, 100)
+corr = np.square(df.corr())
+cov = df.cov()
+W = np.array(corr**2)
 cliques, separators, peo, tree = MFCF_Forest(df,ct_control,gf_sumsquares_gen)
 ```
 More examples could be found in the folder *examples*
