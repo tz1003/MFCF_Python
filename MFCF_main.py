@@ -10,6 +10,7 @@ from init_gain_table import init_gain_table
 def MFCF_Forest(X,ct_control,gain_function):
 
     # analyse X
+    X = np.array(X)
     sizeX = X.shape
     isSquare = sizeX[0] == sizeX[1]
     p = sizeX[1]
