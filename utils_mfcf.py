@@ -7,26 +7,20 @@ def id_from_set(set_matrix, an_element):
     return idx
 
 
-# mincsize######
 def apply_threshold_v(ranked_values, ranked_seps, mincsize, threshold):
 
     ranked_values_thr = []
     ranked_seps_thr = []
     for i in range(len(ranked_values)):
-        rank_values_thr_row = []
-        rank_values_seps_row = []
-        for j in range(len(ranked_values[0])):
-                
-            if ranked_values[i][j] < threshold:
-                rank_values_thr_row.append(np.array([0]))
-                rank_values_seps_row.append(np.nan)
-            else:
-                rank_values_thr_row.append(ranked_values[i][j])
-                rank_values_seps_row.append(ranked_seps[i][j])
-        
+        #rank_values_thr_row = []
+        #rank_values_seps_row = []
+        idx = np.where(ranked_values[i]<threshold)
+        idx = (idx[0]>mincsize-2)*idx[0]
+        ranked_values[i][idx]=0
+        ranked_seps[i][idx]=np.nan
 
-        ranked_values_thr.append(rank_values_thr_row)
-        ranked_seps_thr.append(rank_values_seps_row)  
+        ranked_values_thr.append(ranked_values[i])
+        ranked_seps_thr.append(ranked_seps[i])  
 
     return np.array(ranked_values_thr),np.array(ranked_seps_thr)
 

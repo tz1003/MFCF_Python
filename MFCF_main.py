@@ -5,7 +5,6 @@ import pandas as pd
 from scipy.sparse import lil_matrix
 from gain_function import gf_sumsquares_gen
 from utils_mfcf import *
-from init_gain_table import init_gain_table
 
 def MFCF_Forest(X,ct_control,gain_function):
 
