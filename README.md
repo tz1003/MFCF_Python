@@ -11,9 +11,9 @@ The package is still under development, more examples/comments will be added soo
 
 ✔ Examples
 
-Function *drop_sep*
+✔ Function *drop_sep*
 
-Bug on *coord_num*
+✔ Bug on *coord_num*
 
 Visualisation of the networks
 
