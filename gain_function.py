@@ -67,6 +67,7 @@ def gf_sumsquares_gen(M, clq, v, ct_control):
     # Convert numpy array to pandas DataFrame for sorting
     df = pd.DataFrame(the_table)
     # Sort by first column ascending and second column descending
+    df = df.astype(int)
     df.sort_values(by=[0, 1], ascending=[True, False], inplace=True)
     # Assuming selector and cachesize are defined
     df = df[selector <= cachesize]
