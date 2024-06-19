@@ -26,25 +26,28 @@ def apply_threshold_v(ranked_values, ranked_seps, mincsize, threshold):
 
 
 def greedy_sortsep_v(vertices, sets, W):
-    
-    ranked_values = []
-    ranked_seps = []
-    #for i in range(len(the_vs)):
-    for i in range(len(vertices)):
-        val,sep =  greedy_sortsep(vertices[i], sets[i], W)
-        ranked_values.append(val)
-        ranked_seps.append(sep)
-
-    return np.array(ranked_values), np.array(ranked_seps)
-
+    # Using list comprehension and map function for efficiency
+    results = map(greedy_sortsep, vertices, sets, [W]*len(vertices))
+    ranked_values, ranked_seps = zip(*results)
+    return [np.array(ranked_values), np.array(ranked_seps)]
 
 def greedy_sortsep(vtx, sep, W):
+    # Filtering NaN values and calculating pad length at the start
     sep_ranked = sep[~np.isnan(sep)]
-    pad = len(sep) - len(sep_ranked)
-    values, ranks = np.sort(W[vtx, sep_ranked])[::-1], np.argsort(W[vtx, sep_ranked])[::-1]
-    sep_ranked = np.concatenate((sep_ranked[ranks], np.full(pad, np.nan)))
-    values = np.concatenate((values, np.zeros(pad)))
-    return values, sep_ranked
+    pad_length = len(sep) - len(sep_ranked)
+    
+    # Initializing arrays with NaN and 0 to avoid padding later
+    values = np.full(len(sep), 0, dtype=float)
+    sep_ranked_full = np.full(len(sep), np.nan, dtype=float)
+    
+    if sep_ranked.size > 0:
+        # Vectorized operations for efficiency
+        W_subset = W[vtx, sep_ranked]
+        ranks = np.argsort(W_subset)[::-1]
+        values[:len(ranks)] = W_subset[ranks]
+        sep_ranked_full[:len(ranks)] = sep_ranked[ranks]
+    
+    return values, sep_ranked_full
 
 
 def j_LoGo(cov, cliques, separators):
